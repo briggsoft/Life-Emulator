@@ -1,0 +1,28 @@
+Rem *** Include File: Items.dba ***
+Rem Created: 3/9/2013 6:53:42 PM
+Rem Included in Project: C:\Program Files (x86)\Dark Basic Software\Dark Basic Professional\Projects\LSD\LSD.dbpro
+
+`=========================================================
+`pick up
+items:
+sync on
+pickup1 = 900
+make object plain pickup1,30,30,0
+set object pickup1,1,1,0
+position object pickup1,500,40,0
+`scale object pickup1,800,600,0
+`color object pickup1,rgb(255, 255, 0)
+texture object pickup1,1
+set object light pickup1,5
+
+do
+`Item Effect 3
+`Position object pickup1,0,0.05+(cos(a#)*0.1),-0.5
+yrotate object pickup1,x#
+`zrotate object 20,a#
+inc x#,1
+
+sync
+loop
+return
+

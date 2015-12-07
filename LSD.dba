@@ -1,0 +1,229 @@
+Rem Project: game menu
+Rem Created: Saturday, June 02, 2012
+Rem ***** Main menu Source File *****
+rem screen setup (frame rate)
+sync on : sync rate 30
+backdrop off
+hide mouse
+`autocam off
+
+#include "items.dba"
+
+set window title "Can you smell what the nic is cooking!"
+LOAD MUSIC "music\LSD.mp3", 23
+lOAD sound "music\1.wav", 1
+LOAD sound "music\2.wav", 2
+load image "media\Fa.png",1
+load image "media\Fa2.png",2
+load image "media\spa.jpg",3
+load image "media\title.png",4
+load image "media\options.png",5
+set sound volume 1, 50
+set sound volume 2, 70
+
+
+rem Music
+play music 23
+loop music 23
+
+`title
+make object plain 30,3.5,3,0
+set object 30,1,1,0
+position object 30,-2.5,0,-2
+texture object 30,4
+
+
+`options
+make object plain 31,3.5,3,0
+set object 31,1,1,0
+position object 31,2.5,0,-2
+texture object 31,5
+
+
+`object Face
+point camera 0,0,0
+make object plain 18,3,3,0
+set object 18,1,1,0
+position object 18,0,0,0
+scale object 18,800,600,0
+color object 18,rgb(255, 255, 0)
+texture object 18,1
+set object light 18,5
+
+`object Face2
+make object plain 19,3,3,0
+set object 19,1,1,0
+position object 19,0,0,-1.5
+scale object 19,800,600,0
+color object 19,rgb(255, 255, 0)
+texture object 19,2
+set object light 19,5
+
+`object Face3
+make object plain 20,1,1,0
+set object 20,1,1,0
+position object 20,0,0,6
+scale object 20,800,600,0
+color object 20,rgb(255, 255, 0)
+texture object 20,1
+set object light 20,5
+
+
+`object Face 5
+make object plain 22,3,3,0
+set object 22,1,1,0
+position object 22,5,0,7
+scale object 22,800,600,0
+color object 22,rgb(255, 255, 0)
+texture object 22,1
+set object light 22,5
+
+`Skybox
+make object cube 21,5
+set object 21,1,1,0
+position object 21,0,0,0
+scale object 21,500,500,500
+texture object 21,3
+
+REM Menu Items Main Loop
+Gosub mnuvars
+do
+set text size 30
+if selecteditem <> 0
+ink white, white
+center text screen width ()/1.3, 200, mnuitems$(0)
+else
+ink red, red
+center text screen width()/1.3, 200, mnuitems$(0)
+EndIf
+
+if selecteditem <> 1
+ink white, white
+center text screen width ()/1.3, 250, mnuitems$(1)
+else
+ink red, red
+center text screen width()/1.3, 250, mnuitems$(1)
+EndIf
+
+if selecteditem <> 2
+ink white, white
+center text screen width ()/1.3, 300, mnuitems$(2)
+else
+ink red, red
+center text screen width()/1.3, 300, mnuitems$(2)
+EndIf
+
+if upkey()= 0 and up = 1
+up = 0
+endif
+
+if upkey() = 1 and up = 0
+selecteditem = selecteditem - 1
+up = 1
+
+rem Item sound
+play sound 1
+endif
+if downkey() = 0 and down = 1
+down = 0
+endif
+
+if downkey() = 1 and down = 0
+selecteditem = selecteditem + 1
+down = 1
+rem Item sound
+play sound 1
+endif
+
+if selecteditem < 0
+selecteditem = 3
+stop sound 1
+endif
+
+if selecteditem > 3
+selecteditem = 0
+stop sound 1
+endif
+
+
+REM Quit this shit
+if selecteditem = 2 and returnkey() = 1
+rem Item sound
+   play sound 2
+end
+endif
+
+
+
+REM Start Game
+   if selecteditem = 0 and returnkey () = 1
+   stop music 23
+   rem Item sound
+   play sound 2
+   goto player
+   `goto maingame
+   Endif
+
+REM Them Fags
+if selecteditem = 1 and returnkey() = 1
+rem Item sound
+play sound 2
+center text screen width()/2,screen height()-60,"WHAT THE IS THIS BROKEN SOUND...FUCK?!"
+goto player
+endif
+
+`Image Scroll
+scroll object texture 18,0.00031,0.00031
+`scroll object texture 19,0.00031,0.00031
+`scroll object texture 20,0.00031,0.00031
+
+`Image Effect face 2
+`Position object 19,0,0.05+(cos(a#)*0.1),-0.5
+`yrotate object 19,a#
+zrotate object 19,a#
+inc a#,0.5
+
+`Image Effect 3
+`Position object 20,0,0.05+(cos(a#)*0.1),-0.5
+yrotate object 20,z#
+`zrotate object 20,a#
+inc z#,0.5
+
+`Image Effect box
+`Position object 20,0,0.05+(cos(a#)*0.1),-0.5
+yrotate object 21,h#
+`zrotate object 20,a#
+inc h#,0.05
+
+`===================================================================================
+`Pro-status
+ink white,white
+center text screen width()/2,screen height()-30,"© 1994-2013 Mediocre Software"
+`center text screen width()/2,screen height()-50,"All Rights Reserved"
+
+`Build/verison
+ink white, white
+text 0,0,"Build 0.2.3"
+
+Lock Object on 18
+
+sync
+loop
+
+mnuvars:
+dim mnuitems$ (3)
+mnuItems$(0) = " Begin your trip"
+mnuItems$(1) = " whose Tripping?"
+mnuItems$(2) = "Quit This shit"
+
+selectedItem = 0
+up = 0
+down = 0
+
+red = RGB(300, 120, 200)
+white = RGB(255, 255, 255)
+
+return
+
+
+
